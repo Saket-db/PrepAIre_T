@@ -8,7 +8,7 @@ const AiTool = () => [
     desc: 'Q&A with an AI Career Coach',
     icon: <Brain className="h-4 w-4" />,
     button: 'Ask Now',
-    path: '/ai-chatbot',
+    path: '/ai-tools/ai-chat',
   },
   {
     name: 'AI Resume Analyzer',

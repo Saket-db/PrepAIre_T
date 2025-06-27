@@ -50,7 +50,7 @@ export function AppSidebar() {
             <SidebarHeader>
                 <div className='p-4'>
                     <Image src={'https://res.cloudinary.com/dyy1u7wvc/image/upload/v1749641075/Logo_Name_tnqqid.png'} alt='logo' width={100} height={80}
-                        className='w-full' />
+                        className='w-full' /> <a href='#' />
                     <h2 className='text-sm text-gray-400 text-center mt-2'>Build Your Skills</h2>
                 </div>
             </SidebarHeader>

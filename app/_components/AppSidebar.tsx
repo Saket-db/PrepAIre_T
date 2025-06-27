@@ -33,12 +33,12 @@ const items = [
     },
     {
         title: "Billing & Payments",
-        url: "#",
+        url: "/billing",
         icon: Wallet,
     },
     {
         title: "Profile",
-        url: "#",
+        url: "/profile",
         icon: UserCircle,
     },
 ]

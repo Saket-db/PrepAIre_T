@@ -11,11 +11,17 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Calendar, Home, Inbox, Layers, Search, Settings, UserCircle, Wallet } from "lucide-react"
+import { Calendar, Home, Inbox, Layers, LogOut, Search, Settings, UserCircle, Wallet } from "lucide-react"
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { title } from 'process'
 
 const items = [
+    {
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: Home,
+    },
     {
         title: "Workspace",
         url: "#",
@@ -49,8 +55,15 @@ export function AppSidebar() {
         <Sidebar>
             <SidebarHeader>
                 <div className='p-4'>
-                    <Image src={'https://res.cloudinary.com/dyy1u7wvc/image/upload/v1749641075/Logo_Name_tnqqid.png'} alt='logo' width={100} height={80}
-                        className='w-full' /> <a href='#' />
+                    <a href='/dashboard'>
+                        <Image
+                            src={'https://res.cloudinary.com/dyy1u7wvc/image/upload/v1749641075/Logo_Name_tnqqid.png'}
+                            alt='logo'
+                            width={100}
+                            height={80}
+                            className='w-full cursor-pointer'
+                        />
+                    </a>
                     <h2 className='text-sm text-gray-400 text-center mt-2'>Build Your Skills</h2>
                 </div>
             </SidebarHeader>
@@ -70,6 +83,17 @@ export function AppSidebar() {
                                 //     </SidebarMenuButton>
                                 // </SidebarMenuItem>
                             ))}
+                            {/* Spacer to push logout to bottom */}
+                            <div className="flex-1" />
+                            <a
+                                href="app/page"
+                                className="flex items-center gap-2 text-lg text-red-500 p-2  hover:bg-gray-100 rounded-lg justify-center"
+                            >
+                                <LogOut
+                                    className="h-5 w-5"
+                                />
+                                <span>Log Out</span>
+                            </a>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

@@ -1,9 +1,12 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Send } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
+import EmptyState from './_components/EmptyState'
 
 const page = () => {
+    const [userInput, setUserInput] = useState<string>('');
   return (
     <div className='px-4 md:px-24 lg:px-32 xl:px-48 '>
         <div className='flex items-center justify-between gap-6'>
@@ -18,13 +21,15 @@ const page = () => {
 
         <div>
             {/* empty state */}
+            <EmptyState selectedQuestion = {(question : string) => setUserInput(question)}/>
         </div>
         <div className='flex-1'>
             {/* message list */}
         </div>
         <div className='flex items-center gap-4 justify-between'>
             {/* Input Field */}
-            <Input placeholder='Type Here..' />
+            <Input placeholder='Type Here..' value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}/>
             <Button><Send /></Button>
         </div>
         

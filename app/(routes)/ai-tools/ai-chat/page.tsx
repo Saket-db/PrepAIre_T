@@ -4,9 +4,22 @@ import { Input } from '@/components/ui/input'
 import { Send } from 'lucide-react'
 import React, { useState } from 'react'
 import EmptyState from './_components/EmptyState'
+// import { on } from 'events'
+import axios from 'axios'
 
 const page = () => {
+    const[loading, setLoading] = useState<boolean>(false);
     const [userInput, setUserInput] = useState<string>('');
+   
+   
+    const onSend = async() => {
+        setLoading(true);
+        const result = await axios.post('/api/ai-career-chat-agent',{
+            userInput: userInput
+        });
+        console.log(result.data);
+        setLoading(false);
+    }
   return (
     <div className='px-4 md:px-24 lg:px-32 xl:px-48 '>
         <div className='flex items-center justify-between gap-6'>
@@ -30,7 +43,7 @@ const page = () => {
             {/* Input Field */}
             <Input placeholder='Type Here..' value={userInput}
             onChange={(e) => setUserInput(e.target.value)}/>
-            <Button><Send /></Button>
+            <Button onClick = {onSend} disabled = {loading}><Send /></Button>
         </div>
         
         </div>

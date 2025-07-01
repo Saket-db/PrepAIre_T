@@ -25,7 +25,7 @@ export const AiCareerAgent = inngest.createFunction(
   { id: "AiCareerAgent" },
   { event: "AiCareerAgent" },
   async ({ event, step }) => {
-    const { userInput } = await event.data;
+    const { userInput } = await event?.data;
     const result = await AiCareerChat.run(userInput);
     return result;
   },

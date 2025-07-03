@@ -1,5 +1,5 @@
 // import { openai } from "inngest";
-import { inngest } from "./client";
+import { inngest } from "../inngest/client";
 import { createAgent, anthropic, openai, gemini } from '@inngest/agent-kit';
 
 export const helloWorld = inngest.createFunction(

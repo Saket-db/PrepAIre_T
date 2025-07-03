@@ -6,20 +6,33 @@ import React, { useState } from 'react'
 import EmptyState from './_components/EmptyState'
 // import { on } from 'events'
 import axios from 'axios'
+// import { Result } from 'postcss/lib/postcss'
 
+type Message = {
+    content: string;
+    role: string;
+    type: string;
+}
 const page = () => {
     const[loading, setLoading] = useState<boolean>(false);
     const [userInput, setUserInput] = useState<string>('');
-   
+    const [messageList, setMessageList] = useState<Message[]>([]);
+
    
     const onSend = async() => {
         setLoading(true);
-        const result = await axios.post('/api/ai-career-chat-agent',{
+        setMessageList((prev) => [...prev, { content: userInput, role:'user', type:'text' }]);
+        const result = await axios.post("/api/ai-career-chat-agent", {
             userInput: userInput
         });
         console.log(result.data);
+        setMessageList((prev) => [...prev,result.data]);
         setLoading(false);
     }
+
+console.log('messageList', messageList);
+
+
   return (
     <div className='px-4 md:px-24 lg:px-32 xl:px-48 '>
         <div className='flex items-center justify-between gap-6'>

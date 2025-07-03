@@ -16,9 +16,14 @@ function Provider({
         user && createNewUser();
     }, [user]);
 
-    const createNewUser = async () => {
-        const result = await axios.post('/api/user');
-    }
+const createNewUser = async () => {
+  try {
+    await axios.post('/api/user', {});
+  } catch (err) {
+    console.error("User creation failed:", err);
+  }
+};
+
 
     return (
         <div>
@@ -35,4 +40,3 @@ export const useAuthContext = () => {
 };
 
 export default Provider
-

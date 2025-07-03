@@ -1,5 +1,4 @@
-import { inngest } from "../inngest/client";
-import { VertexAI } from '@google-cloud/vertexai';
+const { VertexAI } = require('@google-cloud/vertexai');
 
 const vertex_ai = new VertexAI({
   project: process.env.GOOGLE_CLOUD_PROJECT || 'fleet-space-463912-f9',
@@ -19,27 +18,10 @@ async function runGeminiChat(userInput: string) {
         { role: 'user', parts: [{ text: SYSTEM_PROMPT + "\n\n" + userInput }] }
       ]
     });
-    const candidates = result?.response?.candidates;
-    if (candidates && candidates.length > 0) {
-      const parts = candidates[0]?.content?.parts;
-      if (parts && parts.length > 0 && parts[0].text) {
-        return parts[0].text;
-      }
-    }
-    return "Sorry, I couldn't generate a response.";
+    console.log("Vertex AI result:", JSON.stringify(result, null, 2));
   } catch (error) {
     console.error("Error in runGeminiChat:", error);
-    return "Sorry, there was an error generating a response.";
   }
 }
 
-export const AiCareerAgent = inngest.createFunction(
-  { id: "AiCareerAgent" },
-  { event: "AiCareerAgent" },
-  async ({ event, step }) => {
-    const { userInput } = event.data;
-    const result = await runGeminiChat(userInput);
-    console.log("Gemini response:", result);
-    return result;
-  }
-);
+runGeminiChat("How can I improve my coding skills?");

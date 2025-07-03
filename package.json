@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "inngest": "npx inngest-cli@latest dev"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.20.0",

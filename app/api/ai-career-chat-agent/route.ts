@@ -34,13 +34,27 @@ export async function POST(req: Request) {
 
         // Poll for run completion
         let attempts = 0;
-        const maxAttempts = 120; // 60 seconds
+        const maxAttempts = 60; // 60 seconds
         let runData: any = null;
+
+        const controller = new AbortController();
+setTimeout(() => controller.abort(), 30000); // 30 seconds timeout
+
+const response = await fetch("http://localhost:3000/api/ai-career-chat-agent", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ userInput }),
+  signal: controller.signal,
+});
+
 
         while (attempts < maxAttempts) {
             try {
                 const runResponse = await getRuns(runId);
-                runData = runResponse?.data?.[0];
+                runData = runResponse;
+
 
                 if (!runData) {
                     throw new Error("Invalid run data received");

@@ -1,11 +1,13 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Send } from 'lucide-react'
+import { LoaderCircle, Send } from 'lucide-react'
 import React, { useState } from 'react'
+// import Markdown from 'react-markdown'
 import EmptyState from './_components/EmptyState'
 // import { on } from 'events'
 import axios from 'axios'
+import ReactMarkdown from 'react-markdown'
 // import { Result } from 'postcss/lib/postcss'
 
 type Message = {
@@ -33,7 +35,12 @@ const page = () => {
         console.log("[UI] onSend called. userInput:", userInput);
         setLoading(true);
         setMessageList((prev) => {
-            const updated = [...prev, { content: userInput, role:'user', type:'text' }];
+            const updated = [...prev, { 
+                content: userInput, 
+                role:'user', 
+                type:'text' 
+            }];
+            setUserInput(''); // Clear input after sending
             console.log("[UI] Added user message to messageList:", updated);
             return updated;
         });
@@ -47,6 +54,7 @@ const page = () => {
                 console.log("[UI] Added API response to messageList:", updated);
                 return updated;
             });
+            setLoading(false);
         } catch (err) {
             console.error("[UI] Error in onSend:", err);
         }
@@ -68,16 +76,34 @@ console.log('[UI] messageList (render):', messageList);
         
         <div className='flex flex-col h-[75vh]'>
 
-        <div>
+        {messageList?.length <=0 && <div className='mt-3'>
             {/* empty state */}
             <EmptyState selectedQuestion = {(question : string) => {
                 console.log("[UI] EmptyState selectedQuestion:", question);
                 setUserInput(question);
             }}/>
-        </div>
+        </div>}
+
         <div className='flex-1'>
             {/* message list */}
+        {messageList?.map((message, index) => (
+            <div>
+            <div key={index} className={`flex mb-2 ${message.role == 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`p-3 rounded-lg gap-2 ${message.role == 'user' ? 'bg-gray-300 text-black' : 'bg-gray-100 text-black'}`}>
+                    <ReactMarkdown>
+                    {message.content}
+
+                    </ReactMarkdown>
+                    </div>
+                </div>
+                {loading && messageList?.length-1 == index && <div className='flex justify-start p-3 rounded-lg gap-2 bg-gray-100 text-black mb-3'>
+                    <LoaderCircle className = "animate-spin" /> Generating response...
+                </div>}
+            </div>
+        ))}
         </div>
+
+
         <div className='flex items-center gap-4 justify-between'>
             {/* Input Field */}
             <Input placeholder='Type Here..' value={userInput}

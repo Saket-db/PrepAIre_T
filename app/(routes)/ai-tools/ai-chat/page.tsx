@@ -18,19 +18,42 @@ const page = () => {
     const [userInput, setUserInput] = useState<string>('');
     const [messageList, setMessageList] = useState<Message[]>([]);
 
-   
+    // Debug: log state changes
+    React.useEffect(() => {
+        console.log("[UI] messageList updated:", messageList);
+    }, [messageList]);
+    React.useEffect(() => {
+        console.log("[UI] userInput updated:", userInput);
+    }, [userInput]);
+    React.useEffect(() => {
+        console.log("[UI] loading state:", loading);
+    }, [loading]);
+
     const onSend = async() => {
+        console.log("[UI] onSend called. userInput:", userInput);
         setLoading(true);
-        setMessageList((prev) => [...prev, { content: userInput, role:'user', type:'text' }]);
-        const result = await axios.post("/api/ai-career-chat-agent", {
-            userInput: userInput
+        setMessageList((prev) => {
+            const updated = [...prev, { content: userInput, role:'user', type:'text' }];
+            console.log("[UI] Added user message to messageList:", updated);
+            return updated;
         });
-        console.log(result.data);
-        setMessageList((prev) => [...prev,result.data]);
+        try {
+            const result = await axios.post("/api/ai-career-chat-agent", {
+                userInput: userInput
+            });
+            console.log("[UI] API result.data:", result.data);
+            setMessageList((prev) => {
+                const updated = [...prev, result.data];
+                console.log("[UI] Added API response to messageList:", updated);
+                return updated;
+            });
+        } catch (err) {
+            console.error("[UI] Error in onSend:", err);
+        }
         setLoading(false);
     }
 
-console.log('messageList', messageList);
+console.log('[UI] messageList (render):', messageList);
 
 
   return (
@@ -47,7 +70,10 @@ console.log('messageList', messageList);
 
         <div>
             {/* empty state */}
-            <EmptyState selectedQuestion = {(question : string) => setUserInput(question)}/>
+            <EmptyState selectedQuestion = {(question : string) => {
+                console.log("[UI] EmptyState selectedQuestion:", question);
+                setUserInput(question);
+            }}/>
         </div>
         <div className='flex-1'>
             {/* message list */}
@@ -55,7 +81,10 @@ console.log('messageList', messageList);
         <div className='flex items-center gap-4 justify-between'>
             {/* Input Field */}
             <Input placeholder='Type Here..' value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}/>
+            onChange={(e) => {
+                console.log("[UI] Input changed:", e.target.value);
+                setUserInput(e.target.value);
+            }}/>
             <Button onClick = {onSend} disabled = {loading}><Send /></Button>
         </div>
         

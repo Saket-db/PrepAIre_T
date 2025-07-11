@@ -2,7 +2,7 @@ import { inngest } from "../inngest/client";
 import { VertexAI } from '@google-cloud/vertexai';
 
 const vertex_ai = new VertexAI({
-  project: process.env.GOOGLE_CLOUD_PROJECT || 'fleet-space-463912-f9',
+  project: process.env.GOOGLE_CLOUD_PROJECT || 'fleet-space-463912-f9',// Shift to env 
   location: 'us-central1',
 });
 
@@ -37,7 +37,8 @@ export const AiCareerAgent = inngest.createFunction(
   { id: "AiCareerAgent" },
   { event: "AiCareerAgent" },
   async ({ event, step }) => {
-    const { userInput } = event.data;
+    const { userInput } = await event?.data;
+    console.log("Received user input:", userInput);
     const result = await runGeminiChat(userInput);
     console.log("Gemini response:", result);
     return result;

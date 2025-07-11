@@ -68,8 +68,7 @@ export default function Home() {
 
           <div className="mt-8 gap-3 flex justify-center">
             <a className="inline-flex justify-center items-center 
-      gap-x-3 text-center bg-gradient-to-tl from-blue-600
-       to-violet-600 hover:from-violet-600 hover:to-blue-600 border border-transparent cursor-pointer text-white text-sm font-medium rounded-md focus:outline-none focus:ring-1 focus:ring-gray-600 py-3 px-4 dark:focus:ring-offset-gray-800"
+      gap-x-3 text-center bg-gradient-to-tl from-[#19253b] to-[#447ef2]  border border-transparent cursor-pointer text-white text-sm font-medium rounded-md focus:outline-none focus:ring-1 focus:ring-gray-600 py-3 px-4 dark:focus:ring-offset-gray-800"
               href="/dashboard">
               Get started
               <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>

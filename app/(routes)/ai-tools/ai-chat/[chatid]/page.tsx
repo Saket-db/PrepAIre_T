@@ -4,10 +4,11 @@ import { Input } from '@/components/ui/input'
 import { LoaderCircle, Send } from 'lucide-react'
 import React, { useState } from 'react'
 // import Markdown from 'react-markdown'
-import EmptyState from './_components/EmptyState'
+import EmptyState from '../_components/EmptyState'
 // import { on } from 'events'
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
+import { useParams } from 'next/navigation'
 // import { Result } from 'postcss/lib/postcss'
 
 type Message = {
@@ -20,6 +21,8 @@ const page = () => {
     const [userInput, setUserInput] = useState<string>('');
     const [messageList, setMessageList] = useState<Message[]>([]);
 
+    const { chatid } = useParams();
+    console.log("[UI] chatId:", chatid);
     // Debug: log state changes
     React.useEffect(() => {
         console.log("[UI] messageList updated:", messageList);

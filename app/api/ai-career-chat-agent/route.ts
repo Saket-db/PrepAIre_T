@@ -46,9 +46,9 @@ export async function POST(req: Request) {
 
     while (attempts < maxAttempts) {
       try {
-        console.log(`[API] Polling attempt ${attempts + 1} for eventId: ${eventId}`);
+        // console.log(`[API] Polling attempt ${attempts + 1} for eventId: ${eventId}`);
         const runsResponse = await getRuns(eventId);
-        console.log(`[API] Full runs response (attempt ${attempts + 1}):`, JSON.stringify(runsResponse, null, 2));
+        // console.log(`[API] Full runs response (attempt ${attempts + 1}):`, JSON.stringify(runsResponse, null, 2));
 
         const runsArray = runsResponse?.data;
 

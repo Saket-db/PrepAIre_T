@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LoaderCircle, Send } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // import Markdown from 'react-markdown'
 import EmptyState from '../_components/EmptyState'
 // import { on } from 'events'
@@ -67,6 +67,19 @@ const page = () => {
 console.log('[UI] messageList (render):', messageList);
 
 
+
+useEffect(() => {
+    messageList.length > 0 && updateMessagesList();
+}, [messageList]);
+
+const updateMessagesList = async() =>{
+        const result = await axios.put('/api/history', {
+            content: userInput,
+            recordId: chatid
+        });
+        console.log(result);
+    }
+
   return (
     <div className='px-4 md:px-24 lg:px-32 xl:px-48 '>
         <div className='flex items-center justify-between gap-6'>
@@ -89,21 +102,20 @@ console.log('[UI] messageList (render):', messageList);
 
         <div className='flex-1'>
             {/* message list */}
-        {messageList?.map((message, index) => (
-            <div>
-            <div key={index} className={`flex mb-2 ${message.role == 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`p-3 rounded-lg gap-2 ${message.role == 'user' ? 'bg-gray-300 text-black' : 'bg-gray-100 text-black'}`}>
-                    <ReactMarkdown>
-                    {message.content}
-
-                    </ReactMarkdown>
+            {messageList?.map((message, index) => (
+                <div key={index}> {/* <-- Add key here */}
+                    <div className={`flex mb-2 ${message.role == 'user' ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`p-3 rounded-lg gap-2 ${message.role == 'user' ? 'bg-gray-300 text-black' : 'bg-gray-100 text-black'}`}>
+                            <ReactMarkdown>
+                                {message.content}
+                            </ReactMarkdown>
+                        </div>
                     </div>
+                    {loading && messageList?.length-1 == index && <div className='flex justify-start p-3 rounded-lg gap-2 bg-gray-100 text-black mb-3'>
+                        <LoaderCircle className = "animate-spin" /> Generating response...
+                    </div>}
                 </div>
-                {loading && messageList?.length-1 == index && <div className='flex justify-start p-3 rounded-lg gap-2 bg-gray-100 text-black mb-3'>
-                    <LoaderCircle className = "animate-spin" /> Generating response...
-                </div>}
-            </div>
-        ))}
+            ))}
         </div>
 
 
@@ -122,4 +134,5 @@ console.log('[UI] messageList (render):', messageList);
   )
 }
 
+// export default page
 export default page

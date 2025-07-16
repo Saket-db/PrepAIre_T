@@ -25,7 +25,7 @@ const AiToolCard = ({ tool }: AiToolProps) => {
   const router = useRouter();
 
   const onClickButton = async () => {
-    const result = await axios.post('api/history', {
+    const result = await axios.post('/api/history', {
       recordId: id,
       content:[]
     })

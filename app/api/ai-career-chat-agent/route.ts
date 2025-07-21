@@ -59,7 +59,7 @@ export async function POST(req: Request) {
           const status = latestRun?.status;
 
           console.log(`[API] Attempt ${attempts + 1}: Run status = ${status}`);
-          console.log(`[API] Attempt ${attempts + 1}: Run object:`, JSON.stringify(latestRun, null, 2));
+          // console.log(`[API] Attempt ${attempts + 1}: Run object:`, JSON.stringify(latestRun, null, 2));
 
           if (status === "Completed") {
             runData = latestRun;

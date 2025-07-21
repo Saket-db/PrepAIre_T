@@ -26,7 +26,7 @@ const AiToolCard = ({ tool }: AiToolProps) => {
 
   const onClickButton = async () => {
     const result = await axios.post('/api/history', {
-      recordId: id,
+      eventID: id,
       content:[]
     })
     console.log("[UI] History record created:", result.data);

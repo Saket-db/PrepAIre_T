@@ -124,3 +124,19 @@ export async function PUT(req: any) {
     );
   }
 }
+
+
+export async function GET(req:any) {
+  const{ searchParams } = new URL(req.url);
+  const eventID = searchParams.get('eventID');
+  try{
+    if(eventID){
+      const result = await db.select().from(userHistoryTable).where(eq(userHistoryTable.eventid, eventID));
+      return NextResponse.json(result[0]);
+    }
+    return NextResponse.json({})
+  }
+  catch (error: any) {
+    return NextResponse.json(error)
+  }
+}

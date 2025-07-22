@@ -2,13 +2,15 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LoaderCircle, Send } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 // import Markdown from 'react-markdown'
 import EmptyState from '../_components/EmptyState'
 // import { on } from 'events'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid';
 import ReactMarkdown from 'react-markdown'
 import { useParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 // import { Result } from 'postcss/lib/postcss'
 
 type Message = {
@@ -21,6 +23,7 @@ const page = () => {
     const [userInput, setUserInput] = useState<string>('');
     const [messageList, setMessageList] = useState<Message[]>([]);
 
+    const router = useRouter();
     const { chatid } = useParams();
     console.log("[UI] chatId:", chatid);
     // Debug: log state changes
@@ -34,6 +37,30 @@ const page = () => {
         console.log("[UI] loading state:", loading);
     }, [loading]);
 
+    useEffect(() => {
+        chatid&&GetMessagesList();
+    },[chatid])
+
+const GetMessagesList = async () => {
+    setLoading(true); // Set loading state while fetching
+    try {
+        const result = await axios.get('/api/history?eventID=' + chatid);
+        
+        // Check if the response has data AND that content is an array
+        if (result.data && Array.isArray(result.data.content)) {
+            setMessageList(result.data.content);
+        } else {
+            // If there's no content, it's a new chat, so use an empty array
+            setMessageList([]);
+        }
+    } catch (error) {
+        console.error("Failed to fetch messages, likely a new chat.", error);
+        // On any error (like a 404), also default to an empty array
+        setMessageList([]);
+    } finally {
+        setLoading(false); // Stop loading
+    }
+};
     const onSend = async() => {
         // Add input validation
         if (!userInput.trim()) {
@@ -97,7 +124,7 @@ const page = () => {
         }
     }
 
-    console.log('[UI] messageList (render):', messageList);
+    // console.log('[UI] messageList (render):', messageList);
 
 
     // --- START OF FIXES ---
@@ -129,6 +156,16 @@ const page = () => {
         }
     }
 
+      const onNewChat = async () => {
+    const id = uuidv4();
+    const result = await axios.post('/api/history', {
+      eventID: id,
+      content:[]
+    })
+    console.log("[UI] History record created:", result.data);
+    router.replace("/ai-tools/ai-chat/" + id);
+  }
+
   return (
     <div className='px-4 md:px-24 lg:px-32 xl:px-48 '>
         <div className='flex items-center justify-between gap-6'>
@@ -136,61 +173,35 @@ const page = () => {
             <h1 className='font-bold -mt-4 text-lg'>AI Career ChatBot</h1>
             <p className=' text-center text-sm'>Chat with our AI assistant for help and guidance.</p>
         </div>
-        <Button>+ New Chat</Button>
+        <div className='mb-3 gap-4'>
+        <Button onClick ={onNewChat}>+ New Chat</Button>
+        </div>
         </div>
         <div className='flex flex-col h-[75vh]'>
-
         {messageList?.length <=0 && <div className='mt-3'>
-
             {/* empty state */}
-
             <EmptyState selectedQuestion = {(question : string) => {
-
                 console.log("[UI] EmptyState selectedQuestion:", question);
-
                 setUserInput(question);
-
             }}/>
-
         </div>}
         <div className='flex-1'>
-
             {/* message list */}
-
             {messageList?.map((message, index) => (
-
                 <div key={index}> {/* <-- Add key here */}
-
                     <div className={`flex mb-2 ${message.role == 'user' ? 'justify-end' : 'justify-start'}`}>
-
                         <div className={`p-3 rounded-lg gap-2 ${message.role == 'user' ? 'bg-gray-300 text-black' : 'bg-gray-100 text-black'}`}>
-
                             <ReactMarkdown>
-
                                 {message.content}
-
                             </ReactMarkdown>
-
                         </div>
-
                     </div>
-
                     {loading && messageList?.length-1 == index && <div className='flex justify-start p-3 rounded-lg gap-2 bg-gray-100 text-black mb-3'>
-
                         <LoaderCircle className = "animate-spin" /> Generating response...
-
                     </div>}
-
                 </div>
-
             ))}
-
         </div>
-
-
-
-
-
         <div className='flex items-center gap-4 justify-between'>
 
             {/* Input Field */}

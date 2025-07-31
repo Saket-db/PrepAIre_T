@@ -7,6 +7,7 @@ import React, { JSX } from 'react'
 import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import ResumeDialogue from './ResumeDialogue';
 // import {v4 as uuidv4} from 'uuid';
 interface TOOL{
     name: string,
@@ -23,8 +24,14 @@ const AiToolCard = ({ tool }: AiToolProps) => {
   const id = uuidv4();
   const { user } = useUser();
   const router = useRouter();
+  const [openResumeButton, setOpenResumeButton] = React.useState(false);
 
   const onClickButton = async () => {
+    if(tool.name == "AI Resume Analyzer") {
+      setOpenResumeButton(true);
+      return;
+    }
+
     const result = await axios.post('/api/history', {
       eventID: id,
       content:[]
@@ -38,9 +45,15 @@ const AiToolCard = ({ tool }: AiToolProps) => {
       <div className='w-8 h-8 mt-2'>{tool.icon}</div>
       <h2 className='font-semibold text-lg lg:mb-2'>{tool.name}</h2>
       <p className='text-sm mb-2 text-gray-500'>{tool.desc}</p>
-      <Link href={tool.path+"/"+id}>
+      {tool.name === "AI Resume Analyzer" ? (
         <Button className='w-full mt-3' onClick={onClickButton}>{tool.button}</Button>
-      </Link>
+      ) : (
+        <Link href={tool.path+"/"+id}>
+          <Button className='w-full mt-3' onClick={onClickButton}>{tool.button}</Button>
+        </Link>
+      )}
+
+      <ResumeDialogue openResumeButton={openResumeButton} setOpenResumeButton={setOpenResumeButton}/>
     </div>
   )
 }

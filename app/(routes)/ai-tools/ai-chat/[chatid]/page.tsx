@@ -44,11 +44,11 @@ const page = () => {
 const GetMessagesList = async () => {
     setLoading(true); // Set loading state while fetching
     try {
-        const result = await axios.get('/api/history?eventID=' + chatid);
+        const result = await axios.get('/api/history?eventID='+chatid);
         
         // Check if the response has data AND that content is an array
         if (result.data && Array.isArray(result.data.content)) {
-            setMessageList(result.data.content);
+            setMessageList(result?.data?.content);
         } else {
             // If there's no content, it's a new chat, so use an empty array
             setMessageList([]);
@@ -165,6 +165,8 @@ const GetMessagesList = async () => {
     console.log("[UI] History record created:", result.data);
     router.replace("/ai-tools/ai-chat/" + id);
   }
+
+  
 
   return (
     <div className='px-4 md:px-24 lg:px-32 xl:px-48 '>
